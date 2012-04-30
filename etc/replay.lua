@@ -1,29 +1,13 @@
 pcall(require, 'luarocks.require')
-
--- require 'lua-nucleo.module'
--- require 'lua-nucleo.strict'
--- require = import 'lua-nucleo/require_and_declare.lua' { 'require_and_declare' }
-
-pcall(require, 'luarocks.require')
+--pcall(require, 'luarocks.require')
 require 'lib.module'
 require 'lib.strict'
 require = import 'lib/require_and_declare.lua' { 'require_and_declare' }
 
 math.randomseed(12345)
 
-local ensure_returns = import 'lib/ensure.lua' { 'ensure_returns' }
+local ensure_returns  = import 'lib/ensure.lua' { 'ensure_returns' }
 local tdeepequals = import 'lib/tdeepequals.lua' { 'tdeepequals' }
-
--- local ensure_returns = import 'lua-nucleo/ensure.lua' { 'ensure_returns' }
--- local tdeepequals = import 'lua-nucleo/tdeepequals.lua' { 'tdeepequals' }
-
--- local find_all_files,
---       read_file
---       = import 'lua-aplicado/filesystem.lua'
---       {
---         'find_all_files',
---         'read_file'
---       }
 
 local find_all_files,
       read_file
@@ -73,7 +57,7 @@ local ensure_custom = function(file, expected, ...)
           print ("ensure_custom fail; FILE: " .. file .. " ITEM: " .. i
             .. "; EXPECTED: '" .. ex .. "'; ACTUAL: '" .. ac .. "'")
         end
-      end  
+      end
 end
 
 local filenames = find_all_files(PREFIX, ".*%d+%.luatexts$")
@@ -82,7 +66,7 @@ table.sort(filenames)
 local n_str
 
 local start = 1
-local _end = #filenames
+local _end = 500 --#filenames
 for i = start, _end do
   local filename = filenames[i]
   n_str = assert(filename:match("^"..PREFIX.."/(%d+).luatexts$"))
@@ -92,14 +76,15 @@ for i = start, _end do
     local tuple, tuple_size = assert(dofile(PREFIX.."/"..n_str..".lua"))
     local data = assert(read_file(filename))
     
-    local expected = { true, unpack(tuple, 1, tuple_size) }
-
-    --ensure_custom(n_str, expected, luatexts.load(data))
+    -- ensure_custom(
+    --     filename, 
+    --     { true, unpack(tuple, 1, tuple_size) }, 
+    --     luatexts.load(data)
+    --   )
 
     ensure_returns(
             "load " .. n_str,
-            --tuple_size + 1, { true, unpack(tuple, 1, tuple_size) },
-            tuple_size + 1, expected,
+            tuple_size + 1, { true, unpack(tuple, 1, tuple_size) },
             luatexts.load(data)
           )
     

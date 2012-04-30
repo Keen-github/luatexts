@@ -355,6 +355,7 @@ return
   cdata_wrap = cdata_wrap;
   cdata_cat = cdata_cat;
   split_by_char = split_by_char;
+
   split_by_offset = split_by_offset;
   count_substrings = count_substrings;
   kv_concat = kv_concat;
