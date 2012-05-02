@@ -1,5 +1,5 @@
 pcall(require, 'luarocks.require')
---pcall(require, 'luarocks.require')
+pcall(require, 'luarocks.require')
 require 'lib.module'
 require 'lib.strict'
 require = import 'lib/require_and_declare.lua' { 'require_and_declare' }
@@ -76,17 +76,17 @@ for i = start, _end do
     local tuple, tuple_size = assert(dofile(PREFIX.."/"..n_str..".lua"))
     local data = assert(read_file(filename))
     
-    -- ensure_custom(
-    --     filename, 
-    --     { true, unpack(tuple, 1, tuple_size) }, 
-    --     luatexts.load(data)
-    --   )
+    ensure_custom(
+        filename, 
+        { true, unpack(tuple, 1, tuple_size) }, 
+        luatexts.load(data)
+      )
 
-    ensure_returns(
-            "load " .. n_str,
-            tuple_size + 1, { true, unpack(tuple, 1, tuple_size) },
-            luatexts.load(data)
-          )
+    -- ensure_returns(
+    --         "load " .. n_str,
+    --         tuple_size + 1, { true, unpack(tuple, 1, tuple_size) },
+    --         luatexts.load(data)
+    --       )
     
   end
 end
