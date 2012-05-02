@@ -8,6 +8,7 @@ math.randomseed(12345)
 
 local ensure_returns  = import 'lib/ensure.lua' { 'ensure_returns' }
 local tdeepequals = import 'lib/tdeepequals.lua' { 'tdeepequals' }
+local tstr = import 'lib/tstr.lua' { 'tstr' }
 
 local find_all_files,
       read_file
@@ -55,7 +56,7 @@ local ensure_custom = function(file, expected, ...)
         local ac = select(i, ...)
         if not tdeepequals(ex, ac) then
           print ("ensure_custom fail; FILE: " .. file .. " ITEM: " .. i
-            .. "; EXPECTED: '" .. ex .. "'; ACTUAL: '" .. ac .. "'")
+            .. "; EXPECTED: '" .. tstr(ex) .. "'; ACTUAL: '" .. tstr(ac) .. "'")
         end
       end
 end
@@ -76,17 +77,17 @@ for i = start, _end do
     local tuple, tuple_size = assert(dofile(PREFIX.."/"..n_str..".lua"))
     local data = assert(read_file(filename))
     
-    -- ensure_custom(
-    --     filename, 
-    --     { true, unpack(tuple, 1, tuple_size) }, 
-    --     luatexts.load(data)
-    --   )
+    ensure_custom(
+        filename, 
+        { true, unpack(tuple, 1, tuple_size) }, 
+        luatexts.load(data)
+      )
 
-    ensure_returns(
-            "load " .. n_str,
-            tuple_size + 1, { true, unpack(tuple, 1, tuple_size) },
-            luatexts.load(data)
-          )
+    -- ensure_returns(
+    --         "load " .. n_str,
+    --         tuple_size + 1, { true, unpack(tuple, 1, tuple_size) },
+    --         luatexts.load(data)
+    --       )
     
   end
 end
