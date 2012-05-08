@@ -52,10 +52,15 @@ io.stderr:flush()
 
 local ensure_custom = function(file, expected, ...)
       for i = 1, select("#", ...) do         
+        
+
         local ex = expected[i]
         local ac = select(i, ...)
+        -- print (i - 1, tstr(ac))
+        -- print (i - 1, tstr(ex))
+
         if not tdeepequals(ex, ac) then
-          print ("ensure_custom fail; FILE: " .. file .. " ITEM: " .. i
+          print ("ensure_custom fail; FILE: " .. file .. " ITEM: " .. i - 1
             .. "; EXPECTED: '" .. tstr(ex) .. "'; ACTUAL: '" .. tstr(ac) .. "'")
         end
       end
@@ -77,6 +82,7 @@ for i = start, _end do
     local tuple, tuple_size = assert(dofile(PREFIX.."/"..n_str..".lua"))
     local data = assert(read_file(filename))
     
+
     ensure_custom(
         filename, 
         { true, unpack(tuple, 1, tuple_size) }, 

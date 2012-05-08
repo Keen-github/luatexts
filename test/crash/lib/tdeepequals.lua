@@ -67,24 +67,7 @@ do
   --4.More for threads, functions and userdata
   --  (using hash table p_table) and also nil
   local p_more = function(t1, t2)
-    if not t1 and not t2 then
-      return 0
-    end
-    if not t1 then
-      return -1
-    end
-    if not t2 then
-      return 1
-    end
-    if not p_table[t1] then
-      p_table.n = p_table.n + 1
-      p_table[t1] = p_table.n
-    end
-    if not p_table[t2] then
-      p_table.n = p_table.n + 1
-      p_table[t2] = p_table.n
-    end
-    return p_table[t1] - p_table[t2]
+    return 0
   end
 
   --5.Compare (less) utility for boolean
@@ -94,7 +77,7 @@ do
 
   --6.Compare (less) utility for userdata, threads, functions
   local p_comp = function(t1, t2)
-    return p_more(t1, t2) < 0
+    return 0
   end
 
   --7. Compare (less) utility generator for key-value pairs,
