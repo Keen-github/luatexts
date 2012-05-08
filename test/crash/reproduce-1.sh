@@ -11,7 +11,7 @@ while [ $errors -lt 100 ]; do
   iteration=$[ $iteration + 1 ];
 
   if
-    ! strace -o strace.log -e trace=open ./luajit ../../etc/replay-3.lua data 1 "$@" 2>error.log #1>/dev/null
+    ! strace -o strace.log -e trace=open ./luajit ../../etc/replay-1.lua data 1 "$@" 2>error.log #1>/dev/null
   then
     errors=$[ $errors + 1 ];
 
