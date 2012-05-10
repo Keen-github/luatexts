@@ -6,7 +6,7 @@ require = import 'lib/require_and_declare.lua' { 'require_and_declare' }
 
 math.randomseed(12345)
 
-local ensure_returns  = import 'lib/ensure.lua' { 'ensure_returns' }
+local ensure_returns, ensure_tdeepequals  = import 'lib/ensure.lua' { 'ensure_returns', 'ensure_tdeepequals' }
 local tdeepequals = import 'lib/tdeepequals.lua' { 'tdeepequals' }
 local tstr = import 'lib/tstr.lua' { 'tstr' }
 
@@ -50,8 +50,16 @@ io.stderr:flush()
 
 --------------------------------------------------------------------------------
 
+local pack = function(...)
+  local t = {}
+  for i = 1, select("#", ...) do
+    t[#t + 1] = select(i, ...)
+  end
+  return t 
+end
+
 local ensure_custom = function(file, expected, ...)
-      for i = 1, select("#", ...) do         
+      for i = 1, select("#", ...) do
         
 
         local ex = expected[i]
@@ -83,6 +91,13 @@ for i = start, _end do
     local data = assert(read_file(filename))
     
 
+    ensure_tdeepequals(
+        "!!!",
+        pack(true, unpack(tuple, 1, tuple_size)),
+        pack(luatexts.load(data))
+      )
+
+-- runs tdeepequals for each value
     ensure_custom(
         filename, 
         { true, unpack(tuple, 1, tuple_size) }, 
