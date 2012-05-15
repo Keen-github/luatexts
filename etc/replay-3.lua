@@ -480,9 +480,10 @@ local pack = function(...)
   return t 
 end
 
+local filename = "data/00000051.luatexts"
+local tuple, tuple_size = assert(dofile("data/00000051.lua"))
+
 for i = 1, 100 do
-  local filename = "data/00000051.luatexts"
-  local tuple, tuple_size = assert(dofile("data/00000051.lua"))
   ensure_tdeepequals(
       filename,
       pack(true, unpack(tuple, 1, tuple_size)),

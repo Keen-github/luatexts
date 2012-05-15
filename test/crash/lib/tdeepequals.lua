@@ -156,55 +156,46 @@ do
         vis2[second] = vis2.n
         local keys1, tkeys1 = analyze(first)
         local keys2, tkeys2 = analyze(second)
-          -- if type(keys1) ~= 'table' or type(keys2) ~= 'table' then
-          --   print("BOGUS KEYS (1): ", "'" .. tostring(keys1) .. "'", "'" .. tostring(keys2) .. "'")
-          -- end
         local i
         local m
         -- nontable keys
         i = 1
+---------------------------------------------------------------------------
+--The error occurs in this block
+---------------------------------------------------------------------------
         if keys1 or keys2 then
+-- Here keys1 and keys2 are tables
+          m = more(#keys1, #keys2)
+          if m ~= 0 then
+            return m
+          end
+
           while i <= #keys1 and i <= #keys2 do
-          -- if type(keys1) ~= 'table' or type(keys2) ~= 'table' then
-          --   print("BOGUS KEYS (2): ", "'" .. tostring(keys1) .. "'", "'" .. tostring(keys2) .. "'")
-          -- end
             m = tmore(keys1[i], keys2[i])
-          -- if type(keys1) ~= 'table' or type(keys2) ~= 'table' then
-          --   print("BOGUS KEYS (3): ", "'" .. tostring(keys1) .. "'", "'" .. tostring(keys2) .. "'")
-          -- end
             if m ~= 0 then
               return m
             end
             m = tmore(first[keys1[i]], second[keys2[i]], vis1, vis2)
-          -- if type(keys1) ~= 'table' or type(keys2) ~= 'table' then
-          --   print("BOGUS KEYS (4): ", "'" .. tostring(keys1) .. "'", "'" .. tostring(keys2) .. "'")
-          -- end
             if m ~= 0 then
               return m
             end
             i = i + 1
           end
-          -- if type(keys1) ~= 'table' or type(keys2) ~= 'table' then
-          --   print("BOGUS KEYS: ", "'" .. tostring(keys1) .. "'", "'" .. tostring(keys2) .. "'")
-          -- end
-          -- NB! 
+-- And here keys1 and keys2 are numbers, which causes an error. 
+-- Memory became corrupted somewhere above. (?)
           m = more(#keys1 - i, #keys2 - i)
           if m ~= 0 then
             return m
           end
+
         end
+---------------------------------------------------------------------------
+---------------------------------------------------------------------------
         -- table keys
         if tkeys1 or tkeys2 then
           table_sort(tkeys1, table_comp(vis1));
           table_sort(tkeys2, table_comp(vis2));
           i = 1
-          -- if type(tkeys1) ~= 'table' or type(tkeys2) ~= 'table' then
-          --   print("BOGUS TKEYS (2): ", "'" .. tostring(tkeys1) .. "'", "'" .. tostring(tkeys2) .. "'")
-          -- end
-          -- print("TKEYS TYPES: ", type(tkeys1), type(tkeys2))
-          -- NB! For some reason the block above does not reveal any error, 'cause tkeys1 and tkeys2 are 
-          --     tables even when the next line fails with "attempt to get length of local 'tkeys2' 
-          --     (a number value)" error. Looks weird...
           while i <= #tkeys1 and i <= #tkeys2 do
             local m = tmore(tkeys1[i][1], tkeys2[i][1], vis1, vis2)
             if m ~= 0 then
