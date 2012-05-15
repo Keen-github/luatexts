@@ -1,5 +1,7 @@
 #! /bin/bash
 
+./luajit -v
+
 command -v strace >/dev/null 2>&1 || { echo >&2 "apt-get install strace"; exit 1; }
 
 echo "`date` REPRODUCE ${@} BEGIN" | tee -a reproduce.log
@@ -7,11 +9,11 @@ echo "`date` REPRODUCE ${@} BEGIN" | tee -a reproduce.log
 iteration="0"
 errors="0"
 
-while [ $errors -lt 100 ]; do
+while [ $iteration -lt 100 ]; do
   iteration=$[ $iteration + 1 ];
 
   if
-    ! strace -o strace.log -e trace=open ./luajit ../../etc/replay-3.lua data 1 "$@" 2>error.log #1>/dev/null
+    ! strace -o strace.log -e trace=open ./luajit ../../etc/replay.lua data 1 "$@" 2>error.log #1>/dev/null
   then
     errors=$[ $errors + 1 ];
 
